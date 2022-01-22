@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gav's Online Learning System</title>
+</head>
+<style>
+  * {
+    font-family: "Roboto", sans-serif;
+  }
+
+  body {
+    text-align: center;
+    color: #fff;
+    background-color: #000000CC;
+  }
+  #numbers {
+    width: 100%;
+    max-width: 600px;
+    padding: 1rem;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+    column-gap: 1rem;
+    row-gap: 1rem;
+    margin: 0 auto;
+  }
+
+  button {
+    background-color: #fff;
+  }
+
+  #numbers button {
+    font-size: 4rem;
+    color: #fff;
+  }
+
+  #numbers button.tens {
+    background-color:blue;
+  }
+
+  #numbers button.twentys {
+    background-color:green;
+  }
+
+  #numbers button.thirtys {
+    background-color:purple;
+  }
+</style>
+<body>
+  <h1>Pronunciation</h1>
+  <div id="numbers">
+    <button class="tens" id="one">1</button>
+    <button class="tens" id="two">2</button>
+    <button class="tens" id="three">3</button>
+    <button class="tens" id="four">4</button>
+    <button class="tens" id="five">5</button>
+    <button class="tens" id="six">6</button>
+    <button class="tens" id="seven">7</button>
+    <button class="tens" id="eight">8</button>
+    <button class="tens" id="nine">9</button>
+    <button class="tens" id="ten">10</button>
+    <button class="twentys" id="eleven">11</button>
+    <button class="twentys" id="twelve">12</button>
+    <button class="twentys" id="thirteen">13</button>
+    <button class="twentys" id="fourteen">14</button>
+    <button class="twentys" id="fifteen">15</button>
+    <button class="twentys" id="sixteen">16</button>
+    <button class="twentys" id="seventeen">17</button>
+    <button class="twentys" id="eigthteen">18</button>
+    <button class="twentys" id="nineteen">19</button>
+    <button class="twentys" id="twenty">20</button>
+    <button class="thirtys" id="twenty-one">21</button>
+    <button class="thirtys" id="twenty-two">22</button>
+    <button class="thirtys" id="twenty-three">23</button>
+    <button class="thirtys" id="twenty-four">24</button>
+    <button class="thirtys" id="twenty-five">25</button>
+    <button class="thirtys" id="twenty-six">26</button>
+    <button class="thirtys" id="twenty-seven">27</button>
+    <button class="thirtys" id="twenty-eight">28</button>
+    <button class="thirtys" id="twenty-nine">29</button>
+    <button class="thirtys" id="thirty">30</button>
+
+  </div>
+    <!-- <br>
+    <button id="play">Count</button>
+    <button id="pause">Pause</button>
+    <button id="stop">Stop</button> -->
+  <script>
+
+    const msg = new SpeechSynthesisUtterance();
+    const numbers = document.querySelectorAll(".tens, .twentys, .thirtys");
+    numbers.forEach(number => {
+      number.addEventListener('click', (e) => {
+        msg.text = e.target.attributes.id.value;
+        speechSynthesis.speak(msg)
+      })
+    })
+
+    speechSynthesis.addEventListener('voiceschanged', () => {
+      const allVoice = speechSynthesis.getVoices();
+      const defaultVoice = allVoice.find(voice => voice.voiceURI === "Google US English")
+      msg.voice = defaultVoice;
+    });
+  </script>
+</body>
+</html>
