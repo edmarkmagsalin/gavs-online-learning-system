@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/style.css">
+  <title>Document</title>
+</head>
+<body>
+  <h2 id="status">Stand-by</h2>
+  <div id="card" class="hide">
+    <img id="item-image" src="" alt=""><br />
+    <span id="item-name"></span>
+  </div>
+  <button id="start">Start</button>
+  <button id="end" class="hide">End</button>
+  <script>
+    /*
+      1. start
+      2. random picture and name will appear
+      2.1 sound will play "Where is this?"
+      3. speak
+        if correct
+          display/play sound -> Wow!! Correct!! Good job Gav!! 🙂
+            if there is still time, back to step 2
+              else go to step 5
+        while wrong
+          display/play sound -> maybe you didn't pronounce it right. please try again Gav 🙂
+            if there is still time, loop this step
+              else go to step 5
+      5. display/play sound -> Times up. Gav, you did a good job!! You got [number] correct answer 🙂
+    */
+    const items = [
+      {
+        "id": 1,
+        "name": "dining room",
+        "imageSource": "https://t4.ftcdn.net/jpg/03/00/98/87/360_F_300988769_dLXeQ0ybSeC3S2dPtg3QavYAX5HtE7Nh.jpg"
+      },
+      {
+        "id": 2,
+        "name": "living room",
+        "imageSource": "https://t4.ftcdn.net/jpg/02/65/86/05/360_F_265860510_OVJuWgOJ7xQCNF8rLjCy51x2hdKGVTQk.jpg"
+      },
+      {
+        "id": 3,
+        "name": "bathroom",
+        "imageSource": "https://t4.ftcdn.net/jpg/03/20/53/63/360_F_320536338_HsiFBIACU1DeoHHxBCCryJFzQ5BhewZl.jpg"
+      },
+      {
+        "id": 4,
+        "name": "bedroom",
+        "imageSource": "https://t4.ftcdn.net/jpg/01/39/23/55/360_F_139235563_Ng2iEfqxio90CnRhALj53yvSsoy1hZ7u.jpg"
+      }
+    ];
+    const start = document.querySelector("#start");
+    const end = document.querySelector("#end");
+    const card = document.querySelector("#card");
+    const status = document.querySelector("#status");
+    const itemImage = document.querySelector("#item-image");
+    var itemName = document.querySelector("#item-name");
+
+    var SpeechRecognition = SpeechRecognition || webkitSpeechRecognition;
+    const msg = new SpeechSynthesisUtterance();
+    speechSynthesis.addEventListener('voiceschanged', () => {
+      const allVoice = speechSynthesis.getVoices();
+      const defaultVoice = allVoice.find(voice => voice.voiceURI === "Google US English")
+      msg.voice = defaultVoice;
+    });
+    const recognition = new SpeechRecognition();
+    
+    let currentItem = null;
+    function loadItem () {
+      const randomItemIndex = currentItem || Math.floor(Math.random() * items.length);
+      console.log({randomItemIndex});
+      itemImage.setAttribute('src', items[randomItemIndex].imageSource); 
+      itemImage.setAttribute('alt', items[randomItemIndex].name);
+      itemName.innerHTML = items[randomItemIndex].name;
+      card.classList.remove('hide');
+      msg.text = "Where is this?";
+      speechSynthesis.speak(msg);
+      recognition.start();
+    }
+    start.addEventListener('click', () => {
+      start.classList.add('hide');
+      end.classList.remove('hide');
+      loadItem()
+    });
+    end.addEventListener('click', () => {
+      end.classList.add('hide');
+      card.classList.add('hide');
+      start.classList.remove('hide');
+    });
+    
+    recognition.onresult = (event) => {
+      const nameOfItem = itemName?.innerHTML;
+      const speechTranscript = event.results[0][0].transcript;
+      const matched = speechTranscript.match(nameOfItem);
+      if(matched) {
+        msg.text = "Correct!! Good job Gav!!";
+        speechSynthesis.speak(msg);
+        currentItem = null;
+        loadItem()
+      } else {
+        msg.text = "Maybe you didn't pronounce it right. Please try again Gav";
+        speechSynthesis.speak(msg);
+        loadItem()
+      }
+    }
+    recognition.onaudiostart = () => {
+      status.innerHTML = 'Listening';
+    }
+    recognition.onend = () => {
+      status.innerHTML = 'Done listening';
+    }
+    recognition.onerror = (event) => {
+      status.innerHTML = 'Speech recognition error detected: ' + event.error;
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+* {
+  font-family: 'Fuzzy Bubbles', cursive;
+}
+
+body {
+  text-align: center;
+  color: #fff;
+  background-color: #000000CC;
+}
+#container {
+  width: 100%;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  flex-wrap: wrap;
+  background-color: beige;
+}
+
+#container div {
+  display: flex;
+}
+
+button {
+  background-color: #fff;
+}
+
+#container button {
+  font-size: 4rem;
+  color: #fff;
+  width: 100px;
+  height: 100px;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-color: transparent;
+  border-radius: 50%;
+  margin: .5rem;
+}
+
+#container button.tens {
+  background-color:blue;
+}
+
+#container button.twentys {
+  background-color:green;
+}
+
+#container button.thirtys {
+  background-color:purple;
+}
+
+.hide {
+  display: none;
+}
